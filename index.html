@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Participant List</title>
+    <link rel="stylesheet" type="text/css" href="bootstrap.min.css">
+    <script src="https://www.gstatic.com/firebasejs/5.5.9/firebase.js"></script>
+    <script src = "ctrl.js" type="text/javascript"></script>
+</head>
+<body>
+  <br><br>
+  <label>Email : </label>
+  <input type="text" id="email">
+  <br><br>
+  <label>Password : </label>
+  <input type="password" id="password">
+  <br><br>
+  <button type="button" onclick="login()" >Submit</button>
+  <br><br>
+  <label>Branch : </label>
+  <select id = "branch" onchange="getevents()">
+      <option value="cs">Computer Science</option>
+      <option value="pre">Pre Events</option>
+      <option value="ws">Workshops</option>
+      <option value="co">Core Events</option>
+      <option value="ee">Electrical</option>
+      <option value="ec">Electronics</option>
+      <option value="me">Mechanical</option>
+      <option value="se">Safety</option>
+      <option value="ce">Civil</option>
+      <option value="it">Information Tech</option>
+      <option value="acc">Accomodation</option>
+  </select>
+  <br><br>
+
+  <label>Event : </label>
+  <select id = "event" onchange="getparticipants()">
+      <option value="">select...</option>
+  </select>
+  <br><br>
+
+  <div class="container">
+    <h2 id="name"></h2>
+    <table class="table table-hover" id="usertable">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Status</th>
+          <th>Attendence</th>
+        </tr>
+      </thead>
+      <tbody>
+      </tbody>
+    </table>
+  </div>
