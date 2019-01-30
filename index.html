@@ -17,27 +17,10 @@
   <br><br>
   <button type="button" onclick="login()" >Submit</button>
   <br><br>
-  <label>Branch : </label>
-  <select id = "branch" onchange="getevents()">
-      <option value="cs">Computer Science</option>
-      <option value="pre">Pre Events</option>
-      <option value="ws">Workshops</option>
-      <option value="co">Core Events</option>
-      <option value="ee">Electrical</option>
-      <option value="ec">Electronics</option>
-      <option value="me">Mechanical</option>
-      <option value="se">Safety</option>
-      <option value="ce">Civil</option>
-      <option value="it">Information Tech</option>
-      <option value="acc">Accomodation</option>
-  </select>
   <br><br>
 
-  <label>Event : </label>
-  <select id = "event" onchange="getparticipants()">
-      <option value="">select...</option>
-  </select>
-  <br><br>
+
+  <label id="ename"></label>
 
   <div class="container">
     <h2 id="name"></h2>
@@ -50,7 +33,7 @@
           <th>Team Member</th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id="userbody">
       </tbody>
     </table>
   </div>
