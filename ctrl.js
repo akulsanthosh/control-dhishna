@@ -142,10 +142,11 @@ number = {};
 function addteam(user) {
     tm = document.getElementById(user);
     bn = document.getElementById(user + 'btn');
-    if (bn) {
-        bn.parentNode.removeChild(bn);
-    }
     if (number[user] < 5) {
+        if (bn) {
+            bn.parentNode.removeChild(bn);
+        }
+
         dv = document.createElement("div");
         dv.innerHTML = '<label>Name : </label><input type="text" class="name' + number[user] + '"><br><br><label>Email : </label><input type="text" class="email' + number[user] + '"><br><br><button type="button" onclick="submitteam(\'' + user + '\')" id="' + user + 'btn">submit Team</button>';
         tm.appendChild(dv);
@@ -202,6 +203,10 @@ event_name = 'def';
 function login() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
+    if (!(email in dict)){
+        alert("Email is wrong")
+        return
+    }
     firebase.auth().setPersistence(firebase.auth.Auth.Persistence.LOCAL).then(function () {
 
         firebase.auth().signInWithEmailAndPassword(email, password).then(function () {
@@ -237,9 +242,21 @@ function submitteam(user) {
     em = {};
     for (var i = 0; i < number[user]; i++) {
         nm[tm.getElementsByClassName("name" + i)[0].value] = "team";
-        var us = firebase.database().ref().child('/users/' + tm.getElementsByClassName("name" + i)[0].value + "/events/" + event);
-        us.set("registered");
-        console.log(number[user])
+        em[tm.getElementsByClassName("email" + i)[0].value] = "team";
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(tm.getElementsByClassName("email" + i)[0].value))
+        {
+            alert("Email checked. Adding to database now")
+            var us = firebase.database().ref().child('/users/' + tm.getElementsByClassName("name" + i)[0].value + "/events/" + event);
+            var mail = firebase.database().ref().child('/users/' + tm.getElementsByClassName("name" + i)[0].value + "/email/");
+            mail.set(tm.getElementsByClassName("email" + i)[0].value);
+            us.set("registered");
+            console.log(number[user]);
+        }
+        else {
+            alert("You have entered an invalid email address!");
+            return (false);
+        }
+
     }
 
     var events = firebase.database().ref().child('/registration/' + event);
