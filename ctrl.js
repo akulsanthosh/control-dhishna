@@ -98,6 +98,7 @@ function changeuser(user) {
 }
 
 function change(user) {
+    hasChanged = false;
     tm = document.getElementById(user);
     if (event_name !== 'def') {
         event = event_name;
