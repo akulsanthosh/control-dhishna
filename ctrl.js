@@ -62,6 +62,8 @@ function getparticipants() {
                         cell.innerHTML = '<button type="button" name="attend" onclick="changestatus(\'' + snapshot.key + '\')">Mark Attendence</button>';
                         cell = row.insertCell(-1);
                         cell.innerHTML = '<button type="button" name="attend" onclick="addteam(\'' + snapshot.key + '\')">Add Team</button>'
+                        cell = row.insertCell(-1);
+                        cell.innerHTML = '<button type="button" name="attend" onclick="makewinner(\''+snapshot.key + '\')">Make Winner</button>'
                         number[snapshot.key] = 0
                     }
                 });
@@ -266,6 +268,31 @@ function submitteam(user) {
     number = {}
 }
 
+no ={};
+function makewinner(user){
+    tm = document.getElementById(user);
+    bn = document.getElementById(user + 'btn');
+    if (no[user]!=1) {
+        dv = document.createElement("div");
+        dv.innerHTML = '<label>Position : </label><input type="text" class="pos"><br><br><l<button type="button" onclick="pushwinner(\'' + user + '\')" id="' + user + 'btn">Update details</button>';
+        tm.appendChild(dv);
+        no[user]=1;
+    }
+}
+
+var name = 'def';
+function pushwinner(user){
+    no[user]=0;
+    tm = document.getElementById(user);
+    // event = document.getElementById("event").value;
+    event = event_name;
+    // nm={};
+    // nm[user]=tm.getElementsByClassName("pos").value;
+
+    var events = firebase.database().ref().child('/registration/' + event).child(user);
+
+    events.set(tm.getElementsByClassName("pos")[0].value);
+}
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         event_name = dict[user.email];
