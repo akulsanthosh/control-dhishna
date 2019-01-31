@@ -57,10 +57,12 @@ function getparticipants() {
                         cell = row.insertCell(-1);
                         cell.innerHTML = eve;
                         cell = row.insertCell(-1);
+                        cell.innerHTML = '<button type="button" name="attend" onclick="changeuser(\'' + snapshot.key + '\')">change atendee</button>';
+                        cell = row.insertCell(-1);
                         cell.innerHTML = '<button type="button" name="attend" onclick="changestatus(\'' + snapshot.key + '\')">Mark Attendence</button>';
                         cell = row.insertCell(-1);
                         cell.innerHTML = '<button type="button" name="attend" onclick="addteam(\'' + snapshot.key + '\')">Add Team</button>'
-                        number[snapshot.key]=0
+                        number[snapshot.key] = 0
                     }
                 });
             });
@@ -70,6 +72,49 @@ function getparticipants() {
     }
 }
 
+hasChanged = false;
+lastUser = 'nul';
+bak = '';
+
+function changeuser(user) {
+
+    if (!hasChanged) {
+        tm = document.getElementById(user);
+        bak = tm.innerHTML;
+        tm.innerHTML += '<label>Name : </label><input type="text" class="name"><br><br><label>Email : </label><input type="text" class="email"><br><br><button type="button" onclick="change(\'' + user + '\')" id="' + user + 'btn1">confirm change</button>';
+        hasChanged = true;
+        lastUser = user;
+
+    } else if (hasChanged && user !== lastUser) {
+        tm = document.getElementById(lastUser);
+        tm.innerHTML = bak ;
+        tm = document.getElementById(user);
+        bak = tm.innerHTML;
+        tm.innerHTML += '<label>Name : </label><input type="text" class="name"><br><br><label>Email : </label><input type="text" class="email"><br><br><button type="button" onclick="change(\'' + user + '\')" id="' + user + 'btn1">confirm change</button>';
+        lastUser = user;
+    }
+
+
+}
+
+function change(user) {
+    tm = document.getElementById(user);
+    if (event_name !== 'def') {
+        event = event_name;
+        var events = firebase.database().ref().child('/registration/' + event + '/' + user);
+
+        name1 = tm.getElementsByClassName("name")[0].value;
+        var events1 = firebase.database().ref().child('/registration/' + event + '/' + name1);
+
+
+        var user1 = firebase.database().ref().child('/users/' + name1 + '/events' + event);
+        events.set(null);
+        events1.set("paid");
+        user1.set("registered");
+    } else {
+        alert("Auth error");
+    }
+}
 
 function changestatus(user) {
     console.log(user);
@@ -183,7 +228,6 @@ function login() {
 }
 
 
-
 function submitteam(user) {
     tm = document.getElementById(user);
     // event = document.getElementById("event").value;
@@ -201,11 +245,11 @@ function submitteam(user) {
     var events = firebase.database().ref().child('/registration/' + event);
 
     events.update(nm);
-    number={}
+    number = {}
 }
 
-firebase.auth().onAuthStateChanged(function(user) {
-    if (user){
+firebase.auth().onAuthStateChanged(function (user) {
+    if (user) {
         event_name = dict[user.email];
         getparticipants();
 
