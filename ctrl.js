@@ -177,7 +177,7 @@ var dict = {
     "deep@dhishna.org": "Deep Learning Workshop",
     'concrete@dhishna.org': "Construction Management in BIM",
     "smartcity@dhishna.org": "Smart Green City",
-    " women@dhishna.org": "Women Techmakers",
+    "women@dhishna.org": "Women Techmakers",
     "metro@dhishna.org": "Kochi metro",
     "fire@dhishna.org": "Fire Training and CPR Workshop",
     "data@dhishna.org": "DATA SCIENCE USING PYTHON",
