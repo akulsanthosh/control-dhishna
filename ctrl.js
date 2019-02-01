@@ -298,6 +298,13 @@ var name = 'def';
 function pushwinner(user){
     no[user]=0;
     tm = document.getElementById(user);
+
+    email = firebase.database().ref().child('/users/').child(user);
+    email.once("value").then(function (snapshot) {
+        em = snapshot.val().email;
+        alert("email : "+em)
+
+    })
     // event = document.getElementById("event").value;
     event = event_name;
     // nm={};
