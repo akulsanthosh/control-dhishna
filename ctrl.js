@@ -64,10 +64,10 @@ function getparticipants() {
                         cell = row.insertCell(-1);
                         cell.innerHTML = '<button type="button" name="attend" onclick="changestatus(\'' + snapshot.key + '\')">Mark Attendence</button>';
                         cell = row.insertCell(-1);
-                        cell.innerHTML = '<button type="button" name="attend" onclick="addteam(\'' + snapshot.key + '\')">Add Team</button>'
+                        cell.innerHTML = '<button type="button" name="attend" onclick="addteam(\'' + snapshot.key + '\')">Add Team</button>';
                         cell = row.insertCell(-1);
-                        cell.innerHTML = '<button type="button" name="attend" onclick="makewinner(\''+snapshot.key + '\')">Make Winner</button>'
-                        number[snapshot.key] = 0
+                        cell.innerHTML = '<button type="button" name="attend" onclick="makewinner(\''+snapshot.key + '\')">Make Winner</button>';
+                        number[snapshot.key] = 0;
                     }
                 });
             });
@@ -105,21 +105,32 @@ function changeuser(user) {
 function change(user) {
     hasChanged = false;
     tm = document.getElementById(user);
-    if (event_name !== 'def') {
-        event = event_name;
-        var events = firebase.database().ref().child('/registration/' + event + '/' + user);
+    var mail = tm.getElementsByClassName("email")[0].value;
+    console.log(mail);
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+        if (event_name !== 'def') {
+            event = event_name;
+            var events = firebase.database().ref().child('/registration/' + event + '/' + user);
 
-        name1 = tm.getElementsByClassName("name")[0].value;
-        var events1 = firebase.database().ref().child('/registration/' + event + '/' + name1);
+            name1 = tm.getElementsByClassName("name")[0].value;
+            var events1 = firebase.database().ref().child('/registration/' + event + '/' + name1);
 
+            var emai = firebase.database().ref().child('/users/' + name1 + '/email');
+            emai.set(mail)
 
-        var user1 = firebase.database().ref().child('/users/' + name1 + '/events' + event);
-        events.set(null);
-        events1.set("paid");
-        user1.set("registered");
-    } else {
-        alert("Auth error");
+            var user1 = firebase.database().ref().child('/users/' + name1 + '/events' + event);
+            events.set(null);
+            events1.set("paid");
+            user1.set("registered");
+        } else {
+            alert("Auth error");
+            }
     }
+    else{
+        alert("Email entered is incorrect.")
+        return
+    }
+
 }
 
 function changestatus(user) {
