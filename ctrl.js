@@ -175,7 +175,7 @@ var dict = {
     "racecar@dhishna.org": "Race Car Designing",
     "chayagrahi@dhishna.org": "Chayagrahi",
     "deep@dhishna.org": "Deep Learning Workshop",
-    'concrete@dhishna.org': "Construction Management in BIM",
+    'concrete@dhishna.org': "Self Compacting Concrete",
     "smartcity@dhishna.org": "Smart Green City",
     "women@dhishna.org": "Women Techmakers",
     "metro@dhishna.org": "Kochi metro",
