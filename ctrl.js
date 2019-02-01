@@ -38,7 +38,7 @@ function getparticipants() {
         var table = document.querySelector('#usertable tbody');
         var events = firebase.database().ref().child('/registration/' + event);
         events.on('value', snap => {
-
+        count = 0;
             table.innerHTML = "";
             snap.forEach(snapshot => {
                 var user = firebase.database().ref().child('/users/' + snapshot.key);
@@ -46,8 +46,11 @@ function getparticipants() {
 
                     var eve = snapshot.val();
                     if (eve !== "team") {
+                        count++;
                         var row = table.insertRow(-1);
                         row.setAttribute("id", snapshot.key);
+                        cell = row.insertCell(-1);
+                        cell.innerHTML = count;
                         cell = row.insertCell(-1);
                         if (sna.val().name) {
                             cell.innerHTML = sna.val().name;
@@ -178,7 +181,7 @@ var dict = {
     "battle@dhishna.org": "Battle of Brains",
     "codestorm@dhishna.org": "CodeStorm",
     "ftc@dhishna.org": "Find The Code",
-    "ui@dhishna.org": "UI\\UX Challenge",
+    "ui@dhishna.org": "UIUX Challenge",
     "offroad@dhishna.org": "OFFROAD BIKING",
     "go@dhishna.org": "Go get 'em",
     "traipse@dhishna.org": "Traipse",
