@@ -38,7 +38,7 @@ function getparticipants() {
         var table = document.querySelector('#usertable tbody');
         var events = firebase.database().ref().child('/registration/' + event);
         events.on('value', snap => {
-        count = 0;
+            count = 0;
             table.innerHTML = "";
             snap.forEach(snapshot => {
                 var user = firebase.database().ref().child('/users/' + snapshot.key);
@@ -66,7 +66,7 @@ function getparticipants() {
                         cell = row.insertCell(-1);
                         cell.innerHTML = '<button type="button" name="attend" onclick="addteam(\'' + snapshot.key + '\')">Add Team</button>';
                         cell = row.insertCell(-1);
-                        cell.innerHTML = '<button type="button" name="attend" onclick="makewinner(\''+snapshot.key + '\')">Make Winner</button>';
+                        cell.innerHTML = '<button type="button" name="attend" onclick="makewinner(\'' + snapshot.key + '\')">Make Winner</button>';
                         number[snapshot.key] = 0;
                     }
                 });
@@ -92,7 +92,7 @@ function changeuser(user) {
 
     } else if (hasChanged && user !== lastUser) {
         tm = document.getElementById(lastUser);
-        tm.innerHTML = bak ;
+        tm.innerHTML = bak;
         tm = document.getElementById(user);
         bak = tm.innerHTML;
         tm.innerHTML += '<label>Name : </label><input type="text" class="name"><br><br><label>Email : </label><input type="text" class="email"><br><br><button type="button" onclick="change(\'' + user + '\')" id="' + user + 'btn1">confirm change</button>';
@@ -107,7 +107,7 @@ function change(user) {
     tm = document.getElementById(user);
     var mail = tm.getElementsByClassName("email")[0].value;
     console.log(mail);
-    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)){
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail)) {
         if (event_name !== 'def') {
             event = event_name;
             var events = firebase.database().ref().child('/registration/' + event + '/' + user);
@@ -124,9 +124,8 @@ function change(user) {
             user1.set("registered");
         } else {
             alert("Auth error");
-            }
-    }
-    else{
+        }
+    } else {
         alert("Email entered is incorrect.")
         return
     }
@@ -212,15 +211,47 @@ var dict = {
     "mind@dhishna.org": "MindSPARK",
     "reality@dhishna.org": "Reality Unknown",
     "male@dhishna.org": "male",
-    "female@dhishna.org": "female"
+    "female@dhishna.org": "female",
+    "web@dhishna.org": "Web Development Workshop"
 };
 
 event_name = 'def';
 
+function submituser() {
+    event = event_name;
+
+    jso = {};
+    jsu = {};
+
+    var us = document.getElementById("name0").value;
+    var em = document.getElementById("email0").value;
+    if (check(em))
+        alert("Checked true");
+    else {
+        alert("email is wrong ");
+        return
+
+    }
+
+    var reg = firebase.database().ref('/registration/' + event).child(us);
+    var user = firebase.database().ref('/users/'+us);
+
+reg.set("paid");
+user.update({
+    name:us,
+    email:em
+}).catch(function (error) {
+    alert(error.message)
+})
+
+
+}
+
+
 function login() {
     var email = document.getElementById("email").value;
     var password = document.getElementById("password").value;
-    if (!(email in dict)){
+    if (!(email in dict)) {
         alert("Email is wrong")
         return
     }
@@ -240,7 +271,7 @@ function login() {
             document.getElementById("ename").innerText = '';
 
             tble = document.getElementById("userbody");
-            tble.innerHTML = ""
+            tble.innerHTML = "";
             firebase.auth().signOut();
 
         });
@@ -260,16 +291,14 @@ function submitteam(user) {
     for (var i = 0; i < number[user]; i++) {
         nm[tm.getElementsByClassName("name" + i)[0].value] = "team";
         em[tm.getElementsByClassName("email" + i)[0].value] = "team";
-        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(tm.getElementsByClassName("email" + i)[0].value))
-        {
+        if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(tm.getElementsByClassName("email" + i)[0].value)) {
             alert("Email checked. Adding to database now")
             var us = firebase.database().ref().child('/users/' + tm.getElementsByClassName("name" + i)[0].value + "/events/" + event);
             var mail = firebase.database().ref().child('/users/' + tm.getElementsByClassName("name" + i)[0].value + "/email/");
             mail.set(tm.getElementsByClassName("email" + i)[0].value);
             us.set("registered");
             console.log(number[user]);
-        }
-        else {
+        } else {
             alert("You have entered an invalid email address!");
             return (false);
         }
@@ -282,27 +311,39 @@ function submitteam(user) {
     number = {}
 }
 
-no ={};
-function makewinner(user){
+no = {};
+
+function makewinner(user) {
     tm = document.getElementById(user);
     bn = document.getElementById(user + 'btn');
-    if (no[user]!=1) {
+    if (no[user] != 1) {
         dv = document.createElement("div");
         dv.innerHTML = '<label>Position : </label><input type="text" class="pos"><br><br><l<button type="button" onclick="pushwinner(\'' + user + '\')" id="' + user + 'btn">Update details</button>';
         tm.appendChild(dv);
-        no[user]=1;
+        no[user] = 1;
     }
 }
 
+function check(mail){
+    if (/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(mail))
+    {
+        return (true)
+    }
+    else {
+        alert("You have entered an invalid email address!")
+        return (false)
+    }
+}
 var name = 'def';
-function pushwinner(user){
-    no[user]=0;
+
+function pushwinner(user) {
+    no[user] = 0;
     tm = document.getElementById(user);
 
     email = firebase.database().ref().child('/users/').child(user);
     email.once("value").then(function (snapshot) {
         em = snapshot.val().email;
-        alert("email : "+em)
+        alert("email : " + em)
 
     })
     // event = document.getElementById("event").value;
@@ -314,6 +355,7 @@ function pushwinner(user){
 
     events.set(tm.getElementsByClassName("pos")[0].value);
 }
+
 firebase.auth().onAuthStateChanged(function (user) {
     if (user) {
         event_name = dict[user.email];
